@@ -30,6 +30,7 @@ object ClassDemo3 {
 
   def main(args: Array[String]): Unit = {
     val p = Person("cyj", 23)
+    p.isInstanceOf
     println(p.name, p.age)
   }
 }

@@ -21,7 +21,6 @@ object ClassDemo4 {
         sdf.parse(dateString)
       }
     }
-
     def main(args: Array[String]): Unit = {
       //5.测试date2String方法
       println(DateUtils.date2String(new Date(), "yyyy-MM-dd HH:mm:ss"))

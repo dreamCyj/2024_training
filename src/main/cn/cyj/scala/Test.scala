@@ -1,7 +1,7 @@
 import java.util.Scanner
 import scala.io.StdIn
 import scala.util.control.Breaks._
-object test {
+object Test {
 
   def main(args: Array[String]): Unit = {
     println("hello world")
