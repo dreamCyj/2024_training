@@ -28,5 +28,6 @@ object ArrayDemo {
         //遍历
         array3 ++= Array("cyj1", "cyj2", "cyj3")
         for(i <- 0 until array3.length) println(array3(i))
+        for(i <- array3) println(i)
     }
 }
