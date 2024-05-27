@@ -6,6 +6,7 @@ object RegexDemo {
 
     val regex = """.+@.+\..+""".r
 
+
     def main(args: Array[String]): Unit = {
         if(regex.findAllMatchIn(email).nonEmpty){
             println(s"${email}是合法邮箱")
@@ -25,5 +26,6 @@ object RegexDemo {
             case x => x -> "未匹配"
         }
         println(list2)
+
     }
 }
