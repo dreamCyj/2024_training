@@ -22,7 +22,7 @@ object ParserSolution {
                     case None => return Result(None, Some("开关名格式错误"))
                 }
             })
-            println(switchMap)
+            //println(switchMap)
             var map: Map[String, String] = Map.empty
             var resultMap = Map[String, SwitchConfig]()
             //对于每一个开关 正则匹配取出属性名和对应的值 并进行校验
@@ -32,7 +32,7 @@ object ParserSolution {
                     //使用match将对应属性放入map
                     config1 match {
                         //enabled校验
-                        case "enabled" => if(List("true", "false").contains(config2)) map += (config -> config2)
+                        case "enabled" => if(List("true", "false").contains(config2)) map += (config1 -> config2)
                                           else return Result(None, Some(s"开关${x._1}的属性${config1}格式错误只能为true or false"))
                         //depList校验
                         case "depList" => if(config2 != null && depListRegex.findFirstIn(config2).isDefined)
@@ -57,7 +57,16 @@ object ParserSolution {
         }
     }
 
-
+    private object ConfigParser  {
+        def stringify(map: Map[String, SwitchConfig]): String = {
+            var configString = ""
+            map.foreach(switchConfig => {
+                configString += (s"${switchConfig._1}.enabled = ${switchConfig._2.enabled}\n${switchConfig._1}.depList = ${switchConfig._2.depList}\n"
+                + s"${(for ((key, value) <- switchConfig._2.metaInfo) yield s"${switchConfig._1}.${key} = ${value}").mkString("\n")}\n")
+            })
+            configString
+        }
+    }
     private case class Result(
                        data: Option[Map[String, SwitchConfig]],
                        error: Option[String]
@@ -70,9 +79,13 @@ object ParserSolution {
                            )
 
     def main(args: Array[String]): Unit = {
-        val configStr: String = "switchA.enabled = true\nswitchA.depList = [1, 2, 3]\nswitchA.metaInfo.owner = \"userA\"\nswitchA.metaInfo.comment = \"hello world\"\n    \nswitchB.enabled = false\nswitchB.depList = [3, 4, 5]\nswitchB.metaInfo.owner = \"userB\"\n\nswitchB.metaInfo.comment = \"hello world\"" // 一段配置内容
+        val configStr: String = "switchA.depList = [1, 2, 3]\nswitchA.metaInfo.cyj = \"userA\"\nswitchA.metaInfo.comment = \"hello world\"\n    \nswitchB.enabled = false\nswitchB.depList = [3, 4, 5]\nswitchB.metaInfo.owner = \"userB\"\n\nswitchB.metaInfo.comment = \"hello 1world\"" // 一段配置内容
         val parser = ConfigParser()
         val result = parser.parse(configStr)
-        println(result)
+        //println(result)
+        val resultMap = result.data.get
+        println(resultMap)
+        val configString = ConfigParser.stringify(resultMap)
+        println(configString)
     }
 }
