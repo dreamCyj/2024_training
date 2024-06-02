@@ -4,7 +4,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Success
 import scala.util.control.Breaks.{break, breakable}
-import scala.xml.XML.parser
 
 object ParserSolution {
 
