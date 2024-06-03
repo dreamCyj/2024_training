@@ -1,3 +1,5 @@
+package cn.cyj.scala
+
 import java.util.Scanner
 import scala.io.StdIn
 import scala.util.control.Breaks._

@@ -2,7 +2,6 @@ package cn.cyj.solution
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Success
 import scala.util.control.Breaks.{break, breakable}
 
 object ParserSolution {
@@ -144,11 +143,11 @@ object ParserSolution {
                                    )
 
     def main(args: Array[String]): Unit = {
-/*        val configStr = "switchA.enabled = false\nswitchA.metaInfo.cyj = \"userA\"\nswitchA.metaInfo.comment = \"hello world\"\n    \nswitchB.enabled = true\nswitchB.depList = [   3,    4   , 5]\nswitchB.metaInfo.owner = \"cyj\"\n\nswitchB.metaInfo.comment = \"hello           1world\"\nswitchA.depList = [ 1,2,3]\n" // 一段配置内容
+        val configStr = "switchA.enabled = false\nswitchA.metaInfo.cyj = \"userA\"\nswitchA.metaInfo.comment = \"hello world\"\n    \nswitchB.enabled = true\nswitchB.depList = [   3,    4   , 5]\nswitchB.metaInfo.owner = \"cyj\"\n\nswitchB.metaInfo.comment = \"hello           1world\"\nswitchA.depList = [ 1,2,3]\n" // 一段配置内容
         val parser = ConfigParser()
         val result = parser.parse(configStr)
         println(s"基础题解: \n${result}\n")
-        val resultMap = result.data.get
+/*        val resultMap = result.data.get
         val configString = ConfigParser.stringify(resultMap)
         println(s"bonus1：\n${configString}")
 
@@ -162,7 +161,7 @@ object ParserSolution {
         val res: Result = parser.getResult
         println(s"bonus2：\n${res}\n")*/
 
-        val parser = ConfigParser()
+/*        val parser = ConfigParser()
         val configStrList = (1 to 500).map(i => s"switch${i}.depList = [  9,10,98]").toList
         println("bonus3: ")
         val start = System.nanoTime()
@@ -177,7 +176,7 @@ object ParserSolution {
         val start1 = System.nanoTime()
         val resultList = configStrList.map(parser.parse)
         val end1 = System.nanoTime()
-        println(s"parse时间${(end1 - start1).toDouble / 1e6}")
+        println(s"parse时间${(end1 - start1).toDouble / 1e6}")*/
         //println(resultList)
     }
 }

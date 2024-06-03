@@ -1,4 +1,5 @@
 package cn.cyj.structure
+
 import scala.collection.mutable
 import scala.collection.mutable.Map
 object MapDemo {

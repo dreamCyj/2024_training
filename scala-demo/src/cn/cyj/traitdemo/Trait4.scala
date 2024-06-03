@@ -1,4 +1,5 @@
 package cn.cyj.traitdemo
+
 import java.util.{HashSet => _, _}
 object Trait4 {
 

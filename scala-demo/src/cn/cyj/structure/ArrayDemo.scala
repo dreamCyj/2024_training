@@ -1,4 +1,5 @@
 package cn.cyj.structure
+
 import scala.collection.mutable.ArrayBuffer
 object ArrayDemo {
     //定长数组

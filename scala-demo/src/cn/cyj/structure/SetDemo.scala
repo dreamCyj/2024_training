@@ -1,4 +1,5 @@
 package cn.cyj.structure
+
 import scala.collection.mutable.Set
 object SetDemo {
     def main(args: Array[String]): Unit = {
