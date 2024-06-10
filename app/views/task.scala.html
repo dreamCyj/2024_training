@@ -1,0 +1,21 @@
+
+@* 传递的参数写在这 *@
+@import views.html.helper.form
+@import scala.collection.mutable.ListBuffer
+@(username: String, taskList: ListBuffer[Task])(implicit request: RequestHeader, flash: Flash)
+@* main里面是title *@
+@main("welcome to task") {
+    <h1> @username 的任务列表</h1>
+        <ul>
+        @for(task <- taskList) {
+            <li>@task.name</li>
+            <form method="post" action="@routes.TaskController.delTask(task.id)">
+            <input type="hidden" name="index" value="@index"/>
+            <input type="submit" value="删除"/>
+            </form>
+        }
+        </ul>
+    <div>
+        <a href="@routes.HomeController.logout">退出</a>
+    </div>
+}

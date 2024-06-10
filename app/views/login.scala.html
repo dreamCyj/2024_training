@@ -1,0 +1,18 @@
+@(loginForm: Form[LoginData])(implicit requestHeader: RequestHeader, flash: Flash)
+@main("login"){
+    <h1>login</h1>
+    <div>
+        @* \@routes.HomeController.validateLogin表示提交表单时向HomeController的validateLogin方法发起请求 *@
+        <form method="post" action = "@routes.HomeController.validateLogin">
+
+            UserName: <input type="text" name = "username">
+            <br>
+            PassWord: <input type = "password" name = "password">
+            <br>
+            <input type="submit" value="登录">
+        </form>
+        <a href="@routes.HomeController.register()">没有账户，去注册</a>
+    </div>
+
+
+}

@@ -1,0 +1,22 @@
+
+@import play.core.j.PlayMagicForJava.implicitJavaMessages
+@(loginForm: Form[LoginData])(implicit requestHeader: RequestHeader, flash: Flash)
+
+@main("register"){
+    <h1>login</h1>
+    <form method="post" action = "@routes.HomeController.createUser">
+        UserName: <input type="text" name = "username"/>
+        <br>
+        PassWord: <input type = "password" name = "password"/>
+        <br>
+        <input type="submit" value="注册">
+    </form>
+
+    @helper.form(action = routes.HomeController.validateLoginForm) {
+        @helper.inputText(loginForm("username"))
+        @helper.inputPassword(loginForm("password"))
+        <div class="form-actions">
+            <button type="submit">注册</button>
+        </div>
+    }
+}
