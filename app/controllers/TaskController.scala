@@ -2,14 +2,13 @@ package controllers
 
 import play.api.db._
 import play.api.mvc._
-import play.db.NamedDatabase
 import services.{TaskService, UserService}
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TaskController @Inject()
-    (@NamedDatabase("default") db: Database, userService: UserService, taskService: TaskService) extends Controller {
+    (userService: UserService, taskService: TaskService) extends Controller {
 
     def getTasks(id: Int): Action[AnyContent] = Action { implicit request =>
       val taskList = taskService.getTasks(id)

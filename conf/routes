@@ -2,16 +2,19 @@
 # This file defines all application routes (Higher priority routes first)
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
-
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
 GET     /dbTest                     controllers.HomeController.dbTest
 GET     /login                      controllers.HomeController.login()
 GET     /register                   controllers.HomeController.register()
 GET     /logout                     controllers.HomeController.logout()
-GET     /getTasks/:id               controllers.TaskController.getTasks(id: Int)
+GET     /getTasks/:userId           controllers.TaskController.getTasks(userId  : Int)
+GET     /getNotes/:userId           controllers.NoteController.getNotes(userId  : Int)
+GET     /home                       controllers.HomeController.home(user: String)
 POST    /delTask/:id                controllers.TaskController.delTask(id: Int)
+POST    /delNote/:id                controllers.NoteController.delNote(id: Int)
 POST    /addTask                    controllers.TaskController.addTask()
+POST    /addNote                    controllers.NoteController.addNote()
 POST    /validateLogin              controllers.HomeController.validateLogin
 POST    /validateLoginForm          controllers.HomeController.validateLoginForm
 POST    /createUser                 controllers.HomeController.createUser

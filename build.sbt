@@ -14,9 +14,5 @@ lazy val root = (project in file("."))
           "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
           "mysql" % "mysql-connector-java" % "8.0.33",  //database
           "com.typesafe.play" %% "filters-helpers" % "2.5.19"//csrf
-
-
-
-
       )
   )

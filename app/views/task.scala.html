@@ -10,7 +10,6 @@
         @for(task <- taskList) {
             <li>@task.name</li>
             <form method="post" action="@routes.TaskController.delTask(task.id)">
-            <input type="hidden" name="index" value="@index"/>
             <input type="submit" value="删除"/>
             </form>
         }

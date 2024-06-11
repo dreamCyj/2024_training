@@ -1,0 +1,23 @@
+
+@* 传递的参数写在这 *@
+@import scala.collection.mutable.ListBuffer
+@(username: String, noteList: ListBuffer[Note])(implicit request: RequestHeader, flash: Flash)
+@* main里面是title *@
+@main("welcome to your task") {
+    <h1> @username 的笔记列表</h1>
+        <ul>
+        @for(note <- noteList) {
+            <li>@note.content</li>
+            <form method="post" action="@routes.NoteController.delNote(note.id)">
+            <input type="submit" value="删除"/>
+            </form>
+        }
+        </ul>
+    <form method="post" action="@routes.NoteController.addNote()">
+        <input type="text" name = "newNote"/>
+        <input type="submit" value="添加笔记"/>
+    </form>
+    <div>
+        <a href="@routes.HomeController.logout">退出</a>
+    </div>
+}

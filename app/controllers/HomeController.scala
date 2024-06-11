@@ -27,6 +27,10 @@ class HomeController @Inject() (@NamedDatabase("default") db: Database, userServ
     Ok(views.html.login(loginForm))
   }
 
+  def home(userString: String): Action[AnyContent] = Action { implicit request =>
+    val user = Json.parse(userString).as[User]
+    Ok(views.html.home(user))
+  }
   def register(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.register(loginForm))
   }
@@ -82,10 +86,11 @@ class HomeController @Inject() (@NamedDatabase("default") db: Database, userServ
       val password = data("password").head
       userService.validateUser(username, password) match {
         case Some(user: User) =>
-          Redirect(routes.TaskController.getTasks(user.id)).withSession(
+          Redirect(routes.HomeController.home(Json.toJson(user).toString()))
+/*          Redirect(routes.TaskController.getTasks(user.id)).withSession(
             "username" -> user.name,
             "userId" -> user.id.toString
-          )
+          )*/
         case None => Redirect(routes.HomeController.login()).flashing("error" -> "用户名或密码错误")
       }
 
