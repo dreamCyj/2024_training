@@ -11,6 +11,7 @@ GET     /register                   controllers.HomeController.register()
 GET     /logout                     controllers.HomeController.logout()
 GET     /getTasks/:id               controllers.TaskController.getTasks(id: Int)
 POST    /delTask/:id                controllers.TaskController.delTask(id: Int)
+POST    /addTask                    controllers.TaskController.addTask()
 POST    /validateLogin              controllers.HomeController.validateLogin
 POST    /validateLoginForm          controllers.HomeController.validateLoginForm
 POST    /createUser                 controllers.HomeController.createUser

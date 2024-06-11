@@ -81,9 +81,14 @@ class HomeController @Inject() (@NamedDatabase("default") db: Database, userServ
       val username = data("username").head
       val password = data("password").head
       userService.validateUser(username, password) match {
-        case Some(user: User) => Redirect(routes.TaskController.getTasks(user.id)).withSession("username" -> user.name)
+        case Some(user: User) =>
+          Redirect(routes.TaskController.getTasks(user.id)).withSession(
+            "username" -> user.name,
+            "userId" -> user.id.toString
+          )
         case None => Redirect(routes.HomeController.login()).flashing("error" -> "用户名或密码错误")
       }
+
     }.getOrElse(Redirect(routes.HomeController.login()))
 
   }
