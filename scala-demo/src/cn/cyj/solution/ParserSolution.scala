@@ -34,27 +34,22 @@ object ParserSolution {
             }
         }
         def parse(configStr: String): Result = {
-            var remaining = configStr
             breakable{
-                while (remaining.nonEmpty) {
-                    extractOneKV(remaining) match {
-                        case Some((kv, rem)) =>
-                            //解析每个kv的结果
-                            val res = parseLine(kv)
-                            //解析出现错误 则break 直接返回result
-                            if(res.error.isDefined) {
-                                //只要有出错 后续便不再执行
-                                break()
-                            }
-                            remaining = rem
-                        case None => break
-                    }
+                extractOneKV(configStr) match {
+                    case Some((kv, rem)) =>
+                        //解析每个kv的结果
+                        val res = parseLine(kv)
+                        //解析出现错误 则break 直接返回result
+                        if(res.error.isDefined) {
+                            break()
+                        }
+                        parse(rem)
+                    case None => break
                 }
-                //字符串中的所有kv解析完毕
+                //字符串中的所有kv解析完毕后
                 result.data.get.foreach(switchConfig => if(switchConfig._2.depList.isEmpty) {
                     result = result.copy(None, Some(s"开关${switchConfig._1}的属性depList为空列表"));break()
-                    }
-                )
+                })
             }
             result
         }
@@ -145,7 +140,10 @@ object ParserSolution {
     def main(args: Array[String]): Unit = {
         val configStr = "switchA.enabled = false\nswitchA.metaInfo.cyj = \"userA\"\nswitchA.metaInfo.comment = \"hello world\"\n    \nswitchB.enabled = true\nswitchB.depList = [   3,    4   , 5]\nswitchB.metaInfo.owner = \"cyj\"\n\nswitchB.metaInfo.comment = \"hello           1world\"\nswitchA.depList = [ 1,2,3]\n" // 一段配置内容
         val parser = ConfigParser()
+        val start = System.nanoTime()
         val result = parser.parse(configStr)
+        val end = System.nanoTime()
+        println(s"parse时间${(end - start).toDouble / 1e6}")
         println(s"基础题解: \n${result}\n")
 /*        val resultMap = result.data.get
         val configString = ConfigParser.stringify(resultMap)
@@ -159,9 +157,9 @@ object ParserSolution {
         parser.parseLine("switchB.metaInfo.comment = \"hello 2world\"")
         parser.parseLine("switchA.metaInfo.comment = \"hello 333world\"")
         val res: Result = parser.getResult
-        println(s"bonus2：\n${res}\n")*/
+        println(s"bonus2：\n${res}\n")
 
-/*        val parser = ConfigParser()
+        //val parser = ConfigParser()
         val configStrList = (1 to 500).map(i => s"switch${i}.depList = [  9,10,98]").toList
         println("bonus3: ")
         val start = System.nanoTime()
