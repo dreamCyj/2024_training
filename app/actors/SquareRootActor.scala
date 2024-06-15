@@ -14,19 +14,18 @@ class SquareRootActor extends Actor{
     import context.dispatcher
 
     //设置超时时间 超过这个时间将会触发ReceiveTimeout消息
-    context.setReceiveTimeout(5.seconds)
+    context.setReceiveTimeout(1.minutes)
     override def receive: Receive = {
         case lowLevel(num: Int) =>
             val sender = super.sender
             val dispatcher = context.system.dispatchers.lookup("my-thread-pool")
             val delay = 100 + random.nextInt(151)
-            println(delay)
             dispatcher.execute(new Runnable {
                 override def run(): Unit = {
                     Thread.sleep(delay)
-                    //println(delay)
+                    //Logger.info(delay.toString)
                     if(delay > 200)
-                        Logger.error("请求失败")
+                        Logger.error("请求超时")
                     else
                         sender ! sqrt(num.toDouble)
                 }
@@ -42,9 +41,9 @@ class SquareRootActor extends Actor{
             val delay = 100 + random.nextInt(151)
             //定时任务模拟高延迟
             context.system.scheduler.scheduleOnce(delay.millis) {
-                println(delay)
+                //Logger.info(delay.toString)
                 if(delay > 200)
-                    Logger.error("请求失败")
+                    Logger.error("请求超时")
                 else
                     sender ! sqrt(num.toDouble)
                 //直接sender ! sqrt(num.toDouble)出现错误:
@@ -52,7 +51,7 @@ class SquareRootActor extends Actor{
             }
         //自定义超时逻辑 超时后结束 不再重试
         case ReceiveTimeout =>
-            println(s"超时未收到消息，自动退出")
+            Logger.info(s"超时未收到消息，自动退出")
             context.stop(self)
     }
 }

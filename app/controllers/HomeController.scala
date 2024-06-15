@@ -22,19 +22,17 @@ class HomeController @Inject() (config: Configuration, actorSystem: ActorSystem)
       (squareRootActor ? SquareRootActor.lowLevel(num)).mapTo[Double].map { result =>
           Ok(f"$result%.2f")
       }.recover {
-          case _: AskTimeoutException => RequestTimeout("超时!!!!")
+          case _: AskTimeoutException => RequestTimeout("请求超时!!!!")
       }
     }
-
     def highLevel(num: Int): Action[AnyContent] = rateLimitedAction.async {
 
       (squareRootActor ? SquareRootActor.highLevel(num)).mapTo[Double].map { result =>
           Ok(f"$result%.2f")
       }.recover {
-          case _: AskTimeoutException => RequestTimeout("超时!!!!")
+          case _: AskTimeoutException => RequestTimeout("请求超时!!!!")
       }
     }
-
 
     def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
       Ok(views.html.index())
