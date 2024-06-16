@@ -6,7 +6,6 @@ import play.api.mvc.{ActionBuilder, Request, Result}
 
 import java.util.concurrent.atomic.AtomicLong
 import scala.concurrent.{ExecutionContext, Future}
-
 class RateLimitedAction(config: Configuration) (implicit ex: ExecutionContext) extends ActionBuilder[Request] {
     private val rateLimit: Int = config.getInt("api.rateLimit").getOrElse(10) // 默认限流值为 10
     private val requestCount = RateLimitedAction.requestCount
