@@ -16,7 +16,7 @@ class SquareRootActor extends Actor{
     import context.dispatcher
 
     //设置超时时间 超过这个时间将会触发ReceiveTimeout消息
-    context.setReceiveTimeout(1.minutes)
+    context.setReceiveTimeout(5.minutes)
     override def receive: Receive = {
         case lowLevel(num: Int) =>
 
