@@ -26,7 +26,7 @@ class SquareRootActor extends Actor{
             ec.execute(new Runnable {
                 override def run(): Unit = {
                     Thread.sleep(delay)
-                    Logger.info(delay.toString)
+                    //Logger.info(delay.toString)
                     send(delay, sender, num)
                 }
             })
@@ -50,7 +50,8 @@ class SquareRootActor extends Actor{
             context.stop(self)
     }
 
-    def send(delay: Int, sender: ActorRef, num: Int): Unit = {
+    //具体实现逻辑
+    private def send(delay: Int, sender: ActorRef, num: Int): Unit = {
         if(delay < 100) {
             Logger.error("实现错误")
             sender ! FailureMessage("实现错误")
