@@ -1,4 +1,4 @@
-1. 将start.sh和target/universal/squarerootapi-1.0-SNAPSHOT.zip 上传到linux环境中(虚拟机/opt目录下)
+1. 将start.sh和target/universal/squarerootapi-1.0-SNAPSHOT.zip 上传到linux环境中(虚拟机/opt/square-root-api/目录下)
 2. 执行命令
 3.        chmod 777 start.sh 
 4.        ./start.sh squarerootapi-1.0-SNAPSHOT.zip
