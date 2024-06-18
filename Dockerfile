@@ -1,6 +1,7 @@
 FROM openjdk:8-jdk-alpine
 
 WORKDIR /opt/square-root-api/
+RUN apk add --no-cache bash
 COPY ./target/universal/stage/  /opt/square-root-api/
 
 EXPOSE 9001
