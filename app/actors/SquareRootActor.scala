@@ -22,7 +22,7 @@ class SquareRootActor extends Actor{
 
             val sender = super.sender
             val ec: ExecutionContext = context.system.dispatchers.lookup("my-thread-pool")
-            val delay = random.nextInt(251)
+            val delay = 100 + random.nextInt(151)
             ec.execute(new Runnable {
                 override def run(): Unit = {
                     Thread.sleep(delay)
@@ -38,7 +38,7 @@ class SquareRootActor extends Actor{
              * 不然会找不到正确的sender 消息会交给死信邮箱
              */
             val sender = super.sender
-            val delay = random.nextInt(251)
+            val delay = 100 + random.nextInt(151)
             //定时任务模拟高延迟
             context.system.scheduler.scheduleOnce(delay.millis) {
                 //Logger.info(delay.toString)
@@ -46,16 +46,14 @@ class SquareRootActor extends Actor{
             }
         //自定义超时逻辑 超时后结束 不再重试
         case ReceiveTimeout =>
-            Logger.info(s"超时未收到消息，自动退出")
+            Logger.info(s"Actor超时未收到消息，自动退出")
             context.stop(self)
     }
 
     //具体实现逻辑
     private def send(delay: Int, sender: ActorRef, num: Int): Unit = {
-        if(delay < 100) {
-            Logger.error("实现错误")
-            sender ! FailureMessage("实现错误")
-        } else if(delay <= 200) {
+
+        if(delay <= 200) {
             sender ! SuccessMessage(sqrt(num.toDouble))
         } else {
             Logger.error("超时")

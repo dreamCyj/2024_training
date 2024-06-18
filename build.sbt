@@ -20,3 +20,12 @@ lazy val root = (project in file("."))
 
       )
   )
+
+/*lazy val autoZip = taskKey[Unit]("AutoZip")
+
+autoZip := {
+    //任务 in 作用域 .value获取任务结果
+    (clean in Compile).value
+    (compile in Compile).value
+    (dist in Universal).value
+}*/
