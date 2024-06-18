@@ -1,11 +1,11 @@
 #!/usr//bin/bash
 #打包项目
 sbt stage
-# 删除之前构建的同名容器(如果存在)
+
 if [ "$(docker ps -aq -f name=square-root-api)" ]; then
     docker rm -f square-root-api
 fi
-# 删除之前构建的同名镜像(如果存在)
+
 if [ "$(docker images -q square-root-api:1.0)" ]; then
     docker rmi square-root-api:1.0
 fi
