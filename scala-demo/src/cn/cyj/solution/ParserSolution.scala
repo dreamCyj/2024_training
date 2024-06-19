@@ -1,8 +1,7 @@
 package cn.cyj.solution
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.control.Breaks.{break, breakable}
+import java.util.concurrent.Executors
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
 object ParserSolution {
 
@@ -10,6 +9,8 @@ object ParserSolution {
     private val switchRegex = "^[a-zA-Z][a-zA-Z0-9_]*[a-zA-Z0-9]$".r  //开关名正则
     private val depListRegex = """\[\s*\d+(\s*,\s*\d+\s*)*]""".r  //depList格式正则
     private val metaInfoRegex = """(metaInfo\.[a-zA-Z0-9_-]+)""".r  //metaInfo.xyz正则
+    private val executor = Executors.newFixedThreadPool(6)
+    implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.fromExecutor(executor)
     private case class ConfigParser(){
 
         private var map: Map[String, SwitchConfig] = Map.empty
@@ -24,31 +25,30 @@ object ParserSolution {
                     val keyValue = config.matched
                     val switchName = keyValue.split("\\.")(0)
                     if(switchRegex.findFirstIn(switchName).isEmpty) {
-                         result = result.copy(None, Some(s"开关名${switchName}格式错误"))
-                         break()
+                        result = result.copy(None, Some(s"开关名${switchName}格式错误"))
+                        None
+                    }else {
+                        // 获取剩余字符串
+                        val remaining = configStr.substring(config.end).trim
+                        Some((keyValue, remaining))
                     }
-                    // 获取剩余字符串
-                    val remaining = configStr.substring(config.end).trim
-                    Some((keyValue, remaining))
                 case None => None
             }
         }
         def parse(configStr: String): Result = {
-            breakable{
-                extractOneKV(configStr) match {
-                    case Some((kv, rem)) =>
-                        //解析每个kv的结果
-                        val res = parseLine(kv)
-                        //解析出现错误 则break 直接返回result
-                        if(res.error.isDefined) {
-                            break()
-                        }
+            extractOneKV(configStr) match {
+                case Some((kv, rem)) =>
+                    //解析每个kv的结果
+                    val res = parseLine(kv)
+                    if(res.error.isEmpty) {
                         parse(rem)
-                    case None => break
-                }
-                //字符串中的所有kv解析完毕后
+                    }
+                case None =>
+            }
+            //字符串中的所有kv解析完毕后
+            if(result.error.isEmpty) {
                 result.data.get.foreach(switchConfig => if(switchConfig._2.depList.isEmpty) {
-                    result = result.copy(None, Some(s"开关${switchConfig._1}的属性depList为空列表"));break()
+                    result = result.copy(None, Some(s"开关${switchConfig._1}的属性depList为空列表"))
                 })
             }
             result
@@ -140,12 +140,9 @@ object ParserSolution {
     def main(args: Array[String]): Unit = {
         val configStr = "switchA.enabled = false\nswitchA.metaInfo.cyj = \"userA\"\nswitchA.metaInfo.comment = \"hello world\"\n    \nswitchB.enabled = true\nswitchB.depList = [   3,    4   , 5]\nswitchB.metaInfo.owner = \"cyj\"\n\nswitchB.metaInfo.comment = \"hello           1world\"\nswitchA.depList = [ 1,2,3]\n" // 一段配置内容
         val parser = ConfigParser()
-        val start = System.nanoTime()
         val result = parser.parse(configStr)
-        val end = System.nanoTime()
-        println(s"parse时间${(end - start).toDouble / 1e6}")
         println(s"基础题解: \n${result}\n")
-/*        val resultMap = result.data.get
+        val resultMap = result.data.get
         val configString = ConfigParser.stringify(resultMap)
         println(s"bonus1：\n${configString}")
 
@@ -160,21 +157,23 @@ object ParserSolution {
         println(s"bonus2：\n${res}\n")
 
         //val parser = ConfigParser()
-        val configStrList = (1 to 500).map(i => s"switch${i}.depList = [  9,10,98]").toList
+        val configStrList = (1 to 10000).map(i => s"switch${i}.depList = [9,10,98]").toList
         println("bonus3: ")
         val start = System.nanoTime()
-        val results = parser.parseAll(configStrList)
-        results.onComplete{
-            case Success(results) =>
-            //results.foreach(println)
+        val resultFuture = parser.parseAll(configStrList)
+        resultFuture.onComplete {
+            case scala.util.Success(results) =>
+                val end = System.nanoTime()
+                println(s"parseAll时间${(end - start).toDouble / 1e6}")
+                //results.foreach(println)
+            case scala.util.Failure(exception) =>
+                println(s"出现异常${exception.getMessage}")
         }
-        val end = System.nanoTime()
-        println(s"parseAll时间${(end - start).toDouble / 1e6}")
         //println(results)
         val start1 = System.nanoTime()
         val resultList = configStrList.map(parser.parse)
         val end1 = System.nanoTime()
-        println(s"parse时间${(end1 - start1).toDouble / 1e6}")*/
+        println(s"parse时间${(end1 - start1).toDouble / 1e6}")
         //println(resultList)
     }
 }

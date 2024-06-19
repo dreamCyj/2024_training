@@ -28,6 +28,7 @@ class AddActor extends Actor {
     override def receive: Receive = {
         case x: Int => sum = sum + x
         //println(s"current sum is : $sum")
+        println(sender())
         sender ! sum
 
 
